@@ -2,10 +2,19 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { AbstractDocument } from '../database/abstract.schema';
 import { UrlStatus } from '../enums';
+import { getUnixTime } from 'date-fns';
 
 export type UrlDocument = Url & Document;
 
-@Schema({ timestamps: true })
+@Schema({
+  collection: 'urls',
+  versionKey: false,
+  timestamps: {
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
+    currentTime: () => getUnixTime(new Date()),
+  },
+})
 export class Url extends AbstractDocument {
   @Prop({ required: true })
   url: string;
@@ -13,7 +22,7 @@ export class Url extends AbstractDocument {
   @Prop({ required: true, min: 1, max: 5 })
   priority: number;
 
-  @Prop({ enum: UrlStatus, default: UrlStatus.ONLINE })
+  @Prop({ type: String, enum: UrlStatus, default: UrlStatus.ONLINE })
   status: UrlStatus;
 
   @Prop({ type: String, default: 'general' })
