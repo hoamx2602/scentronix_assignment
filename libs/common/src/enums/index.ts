@@ -1,11 +1,11 @@
 export enum UserRole {
-  ADMIN,
-  MODERATOR,
-  USER,
+  ADMIN = 'admin',
+  MODERATOR = 'morderator',
+  USER = 'user',
 }
 
 export enum UrlStatus {
-  ONLINE,
-  WARNING,
-  OFFLINE,
+  ONLINE = 'online',
+  WARNING = 'warning',
+  OFFLINE = 'offline',
 }

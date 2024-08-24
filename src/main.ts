@@ -3,11 +3,12 @@ import { AppModule } from './app.module';
 import * as bodyParser from 'body-parser';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.setGlobalPrefix('api/v1');
+  app.setGlobalPrefix('api');
 
   app.enableCors({
     origin: '*',
@@ -16,13 +17,21 @@ async function bootstrap() {
   });
 
   const configService = app.get(ConfigService);
-  const maxBody = configService.get<string>('MAX_BODY_PARSER');
 
-  app.use(bodyParser.json({ limit: maxBody }));
-  app.use(bodyParser.urlencoded({ limit: maxBody, extended: true }));
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: true }));
+
+  // Global Validation Pipe
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    }),
+  );
 
   const environment = configService.get<string>('NODE_ENV');
-  if (['dev', 'staging'].includes(environment)) {
+  if (['development', 'staging'].includes(environment)) {
     const config = new DocumentBuilder()
       .setTitle('System Monitoring')
       .setDescription('API description')
@@ -30,9 +39,12 @@ async function bootstrap() {
       .addBearerAuth()
       .build();
     const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('docs', app, document);
+    SwaggerModule.setup('api/docs', app, document);
   }
 
-  await app.listen(configService.get<number>('PORT'));
+  const port = +configService.get<number>('PORT');
+  await app.listen(port).then(() => {
+    console.log(`Application is running on port ${port}`);
+  });
 }
 bootstrap();

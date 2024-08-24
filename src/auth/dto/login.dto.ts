@@ -1,12 +1,13 @@
-import { IsNotEmpty, IsString, IsStrongPassword } from 'class-validator';
+import { User } from '@app/common';
+import { PickType } from '@nestjs/swagger';
+import { IsNotEmpty, IsString } from 'class-validator';
 
-export class LoginDto {
-  @IsString()
+export class LoginDto extends PickType(User, ['username', 'password']) {
   @IsNotEmpty()
+  @IsString()
   username: string;
 
-  @IsString()
   @IsNotEmpty()
-  @IsStrongPassword()
+  @IsString()
   password: string;
 }

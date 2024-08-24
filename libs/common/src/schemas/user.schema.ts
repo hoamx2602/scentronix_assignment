@@ -3,6 +3,7 @@ import { Document } from 'mongoose';
 import { UserRole } from '../enums';
 import { AbstractDocument } from '../database/abstract.schema';
 import { getUnixTime } from 'date-fns';
+import { ApiProperty } from '@nestjs/swagger';
 
 export type UserDocument = User & Document;
 
@@ -17,8 +18,14 @@ export type UserDocument = User & Document;
 })
 export class User extends AbstractDocument {
   @Prop({ required: true })
+  @ApiProperty({
+    example: 'your_username',
+  })
   username: string;
 
+  @ApiProperty({
+    example: 'your_password',
+  })
   @Prop({ required: true })
   password: string;
 
