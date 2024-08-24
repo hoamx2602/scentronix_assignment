@@ -1,4 +1,5 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { User } from '@app/common';
+import { PickType } from '@nestjs/swagger';
 import {
   IsNotEmpty,
   IsString,
@@ -7,14 +8,11 @@ import {
   Min,
 } from 'class-validator';
 
-export class RegisterDto {
+export class RegisterDto extends PickType(User, ['username', 'password']) {
   @IsString()
   @IsNotEmpty()
   @Min(5)
   @Max(20)
-  @ApiProperty({
-    example: 'your_username',
-  })
   username: string;
 
   @IsString()
@@ -22,8 +20,5 @@ export class RegisterDto {
   @IsStrongPassword()
   @Min(8)
   @Max(20)
-  @ApiProperty({
-    example: 'your_password',
-  })
   password: string;
 }

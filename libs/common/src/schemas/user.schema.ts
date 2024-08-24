@@ -20,11 +20,15 @@ export class User extends AbstractDocument {
   @Prop({ required: true })
   @ApiProperty({
     example: 'your_username',
+    minimum: 5,
+    maximum: 20,
   })
   username: string;
 
   @ApiProperty({
     example: 'your_password',
+    minimum: 8,
+    maximum: 20,
   })
   @Prop({ required: true })
   password: string;
