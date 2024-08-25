@@ -1,2 +1,1 @@
-export * from './query.dto';
-export * from './url.dto';
+export * from './get-reachable-urls.dto';

@@ -17,7 +17,11 @@ export class AuthService {
   ) {}
 
   async login(user: User, response: Response) {
-    const payload = { username: user.username, sub: user._id, role: user.role };
+    const payload = {
+      username: user.username,
+      userId: user._id,
+      role: user.role,
+    };
 
     const expires = new Date();
     expires.setSeconds(

@@ -1,14 +1,26 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { UrlsService } from './urls.service';
-import { QueryDto, UrlDto } from './dto';
+import { GetReachableUrlsDto, UrlDto } from './dto';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import JwtAuthGuard from 'src/auth/guards/jwt-auth.guard';
 
+@ApiTags('Url')
+@ApiBearerAuth()
 @Controller('urls')
 export class UrlsController {
   constructor(private readonly urlsService: UrlsService) {}
 
-  @Get()
-  findAll(@Query() query: QueryDto): Promise<UrlDto[]> {
-    const { priority = undefined } = query;
-    return this.urlsService.getReachableUrls(priority);
+  @Post()
+  @ApiOperation({
+    description: 'Check status urls list and sort',
+  })
+  @ApiBody({
+    type: GetReachableUrlsDto,
+  })
+  @UseGuards(JwtAuthGuard)
+  getReachableUrls(
+    @Body() reachableUrlsDto: GetReachableUrlsDto,
+  ): Promise<UrlDto[]> {
+    return this.urlsService.getReachableUrls(reachableUrlsDto);
   }
 }
