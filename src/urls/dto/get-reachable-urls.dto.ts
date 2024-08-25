@@ -1,41 +1,23 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
   ArrayNotEmpty,
   IsArray,
   IsInt,
-  IsNotEmpty,
   IsNumber,
   IsOptional,
-  IsString,
-  IsUrl,
-  Min,
   ValidateNested,
 } from 'class-validator';
-
-export class UrlDto {
-  @IsString()
-  @IsUrl()
-  @IsNotEmpty()
-  @ApiProperty({
-    example: 'https://example.com',
-  })
-  url: string;
-
-  @IsNumber()
-  @IsInt()
-  @Min(1)
-  @ApiProperty({
-    example: 3,
-  })
-  priority: number;
-}
+import { UrlDto } from './url.dto';
 
 export class GetReachableUrlsDto {
   @IsNumber()
   @IsInt()
-  @IsOptional()
-  @ApiProperty({
+  @IsOptional({
+    always: true,
+  })
+  @ApiPropertyOptional({
+    description: 'Priority number using for filter',
     example: 3,
   })
   filterPriority?: number;

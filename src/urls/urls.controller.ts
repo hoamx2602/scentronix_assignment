@@ -10,9 +10,9 @@ import JwtAuthGuard from 'src/auth/guards/jwt-auth.guard';
 export class UrlsController {
   constructor(private readonly urlsService: UrlsService) {}
 
-  @Post()
+  @Post('/')
   @ApiOperation({
-    description: 'Check status urls list and sort',
+    description: 'Get reachable urls list and sort',
   })
   @ApiBody({
     type: GetReachableUrlsDto,
