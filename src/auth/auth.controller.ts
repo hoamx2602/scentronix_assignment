@@ -1,7 +1,7 @@
 import { Body, Controller, Post, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto, RegisterDto } from './dto';
-import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { User } from '@app/common';
 import { Response } from 'express';
 import { CurrentUser } from './decorators/current-user.decorator';
@@ -16,12 +16,18 @@ export class AuthController {
   @ApiBody({
     type: RegisterDto,
   })
+  @ApiOperation({
+    description: 'Register a new User',
+  })
   async register(@Body() registerDto: RegisterDto) {
     return this.authService.register(registerDto);
   }
 
   @UseGuards(LocalAuthGuard)
   @ApiBody({ type: LoginDto })
+  @ApiOperation({
+    description: 'Login',
+  })
   @Post('/login')
   async login(
     @CurrentUser() user: User,
