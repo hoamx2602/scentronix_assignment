@@ -14,4 +14,15 @@ export class UrlRepository extends AbstractRepository<Url> {
   ) {
     super(UrlModel, connection);
   }
+
+  async insertMany(urls: Partial<Url>[]): Promise<Url[]> {
+    try {
+      const result = await this.model.insertMany(urls, { ordered: false });
+      this.logger.log(`Inserted ${result.length} URLs`);
+      return result;
+    } catch (error) {
+      this.logger.error('Failed to insert URLs', error.stack);
+      throw error;
+    }
+  }
 }

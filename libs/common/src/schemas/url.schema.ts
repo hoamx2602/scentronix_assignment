@@ -23,12 +23,6 @@ export class Url extends AbstractDocument {
 
   @Prop({ type: String })
   serviceOwner: string;
-
-  @Prop({ type: [String], default: [] })
-  alertChannels: string[];
-
-  @Prop({ type: Map, of: String, default: {} })
-  metadata: Map<string, string>;
 }
 
 export const UrlSchema = SchemaFactory.createForClass(Url);
