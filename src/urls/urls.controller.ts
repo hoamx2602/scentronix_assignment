@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post, UseGuards } from '@nestjs/common';
 import { UrlsService } from './urls.service';
 import { GetReachableUrlsDto, UrlDto } from './dto';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -17,6 +17,7 @@ export class UrlsController {
   @ApiBody({
     type: GetReachableUrlsDto,
   })
+  @HttpCode(200)
   @UseGuards(JwtAuthGuard)
   getReachableUrls(
     @Body() reachableUrlsDto: GetReachableUrlsDto,

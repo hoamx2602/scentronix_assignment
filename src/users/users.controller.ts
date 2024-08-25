@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post } from '@nestjs/common';
 import { UsersService } from './users.service';
 import {
   ApiBody,
@@ -20,6 +20,7 @@ export class UsersController {
   @ApiCreatedResponse({
     description: 'Create new user success',
   })
+  @HttpCode(200)
   @Post('/')
   async createUser(@Body() createUserDto: CreateUserDto) {
     return this.usersService.createUser(createUserDto);

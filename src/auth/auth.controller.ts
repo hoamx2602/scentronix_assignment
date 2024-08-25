@@ -1,4 +1,11 @@
-import { Body, Controller, Post, Res, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  Post,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto, RegisterDto } from './dto';
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -28,6 +35,7 @@ export class AuthController {
   @ApiOperation({
     description: 'Login',
   })
+  @HttpCode(200)
   @Post('/login')
   async login(
     @CurrentUser() user: User,
