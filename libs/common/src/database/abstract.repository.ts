@@ -6,6 +6,7 @@ import {
   UpdateQuery,
   SaveOptions,
   Connection,
+  ProjectionType,
 } from 'mongoose';
 import { AbstractDocument } from './abstract.schema';
 
@@ -69,8 +70,11 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
     });
   }
 
-  async find(filterQuery: FilterQuery<TDocument>) {
-    return this.model.find(filterQuery, {}, { lean: true });
+  async find(
+    filterQuery: FilterQuery<TDocument>,
+    projection: ProjectionType<TDocument> = {},
+  ) {
+    return this.model.find(filterQuery, projection, { lean: true });
   }
 
   async startTransaction() {

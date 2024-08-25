@@ -13,9 +13,7 @@ import { UrlDto } from './url.dto';
 export class GetReachableUrlsDto {
   @IsNumber()
   @IsInt()
-  @IsOptional({
-    always: true,
-  })
+  @IsOptional()
   @ApiPropertyOptional({
     description: 'Priority number using for filter',
     example: 3,

@@ -1,7 +1,21 @@
-import { Body, Controller, HttpCode, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { UrlsService } from './urls.service';
-import { AddUrlsDto, GetReachableUrlsDto, UrlDto } from './dto';
-import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { AddUrlsDto, GetReachableUrlsDto, QueryDto, UrlDto } from './dto';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Roles } from '../auth/decorators/role.decorator';
 import { UserRole } from '@app/common/enums';
 import { RolesGuard, JwtAuthGuard } from '../auth/guards';
@@ -41,5 +55,21 @@ export class UrlsController {
   @UseGuards(JwtAuthGuard)
   async addUserUrls(@CurrentUser() user: User, @Body() addUrlDto: AddUrlsDto) {
     await this.urlsService.addUserUrls(user, addUrlDto);
+  }
+
+  @Get('/reachable')
+  @ApiOperation({
+    description: 'Get online services for current user',
+  })
+  @ApiQuery({
+    type: QueryDto,
+  })
+  @HttpCode(200)
+  @UseGuards(JwtAuthGuard)
+  async getOnlineServicesForUser(
+    @CurrentUser() user: User,
+    @Query() query: QueryDto,
+  ) {
+    await this.urlsService.getOnlineServicesForUser(user, query);
   }
 }

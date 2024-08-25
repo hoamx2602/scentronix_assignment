@@ -1,8 +1,8 @@
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
-import { AddUrlsDto, GetReachableUrlsDto, UrlDto } from './dto';
+import { AddUrlsDto, GetReachableUrlsDto, QueryDto, UrlDto } from './dto';
 import axios from 'axios';
 import { UrlStatus } from './interfaces';
-import { UrlRepository, User } from '@app/common';
+import { Url, UrlRepository, User } from '@app/common';
 import { LIST_URL_NOT_SATISFY } from '@app/common/error-messages';
 
 @Injectable()
@@ -18,13 +18,17 @@ export class UrlsService {
       ? urls.filter((item) => item.priority === filterPriority)
       : urls;
 
-    const checkPromises = filteredList.map((item) => {
+    return this.getOnlineServices(filteredList);
+  }
+
+  async getOnlineServices(urls: UrlDto[]) {
+    const checkPromises = urls.map((item) => {
       return this.checkUrlStatus(item.url);
     });
 
     const results = await Promise.all(checkPromises);
 
-    return this.filterAndSortUrls(filteredList, results);
+    return this.filterAndSortUrls(urls, results);
   }
 
   async checkUrlStatus(
@@ -80,5 +84,28 @@ export class UrlsService {
     this.logger.debug('CREATE_URLS', JSON.stringify({ urls, user }));
 
     return newUrlsCreated;
+  }
+
+  async getOnlineServicesForUser(user: User, query: QueryDto) {
+    const { filterPriority } = query;
+
+    const filter: Partial<Url> = {
+      serviceOwner: user._id.toHexString(),
+    };
+
+    if (filterPriority) {
+      filter.priority = filterPriority;
+    }
+
+    const userUrls: Url[] = await this.urlRepository.find(filter, {
+      url: 1,
+      priority: 1,
+    });
+
+    if (!userUrls.length) {
+      return [];
+    }
+
+    return this.getOnlineServices(userUrls);
   }
 }
