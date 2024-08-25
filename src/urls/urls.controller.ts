@@ -2,7 +2,9 @@ import { Body, Controller, HttpCode, Post, UseGuards } from '@nestjs/common';
 import { UrlsService } from './urls.service';
 import { GetReachableUrlsDto, UrlDto } from './dto';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
-import JwtAuthGuard from 'src/auth/guards/jwt-auth.guard';
+import { Roles } from '../auth/decorators/role.decorator';
+import { UserRole } from '@app/common/enums';
+import { RolesGuard, JwtAuthGuard } from '../auth/guards';
 
 @ApiTags('Url')
 @ApiBearerAuth()
@@ -17,8 +19,9 @@ export class UrlsController {
   @ApiBody({
     type: GetReachableUrlsDto,
   })
+  @Roles(UserRole.ADMIN, UserRole.MODERATOR)
   @HttpCode(200)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   getReachableUrls(
     @Body() reachableUrlsDto: GetReachableUrlsDto,
   ): Promise<UrlDto[]> {
