@@ -4,18 +4,13 @@ import axios from 'axios';
 import { UrlStatus } from './interfaces';
 import { Url, UrlRepository, User } from '@app/common';
 import { LIST_URL_NOT_SATISFY } from '@app/common/error-messages';
-import { InjectQueue } from '@nestjs/bull';
-import { Queue } from 'bull';
 
 @Injectable()
 export class UrlsService {
   private readonly logger = new Logger(UrlsService.name);
   private readonly timeout = 5000;
 
-  constructor(
-    private readonly urlRepository: UrlRepository,
-    @InjectQueue('url-check') private urlCheckQueue: Queue,
-  ) {}
+  constructor(private readonly urlRepository: UrlRepository) {}
 
   async getReachableUrls(reachableUrlsDto: GetReachableUrlsDto) {
     const { urls, filterPriority } = reachableUrlsDto;
@@ -112,11 +107,5 @@ export class UrlsService {
     }
 
     return this.getOnlineServices(userUrls);
-  }
-
-  async scheduleUrlCheck(userId: string) {
-    await this.urlCheckQueue.add({
-      userId,
-    });
   }
 }

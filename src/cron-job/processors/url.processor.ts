@@ -3,8 +3,9 @@ import { Process, Processor } from '@nestjs/bull';
 import { Job } from 'bull';
 import { UrlDto } from '../../urls/dto';
 import { UrlsService } from '../../urls/urls.service';
+import { URL_CHECK_QUEUE } from '@app/common/const';
 
-@Processor('url-check')
+@Processor(URL_CHECK_QUEUE)
 export class UrlsProcessor {
   constructor(
     private readonly urlRepository: UrlRepository,
