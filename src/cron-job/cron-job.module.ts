@@ -13,7 +13,8 @@ import { UrlsService } from 'src/urls/urls.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { BullModule } from '@nestjs/bull';
 import { URL_CHECK_QUEUE } from '@app/common/const';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { BullBoardModule } from '@bull-board/nestjs';
+import { BullAdapter } from '@bull-board/api/bullAdapter';
 
 @Module({
   imports: [
@@ -22,29 +23,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       { name: User.name, schema: UserSchema },
       { name: Url.name, schema: UrlSchema },
     ]),
-    BullModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        redis: {
-          host: configService.get('REDIS_HOST'),
-          port: configService.get('REDIS_PORT'),
-          password: configService.get('REDIS_PASSWORD'),
-        },
-        defaultJobOptions: {
-          attempts: 1,
-          timeout: 5 * 60 * 1000,
-          removeOnComplete: true,
-          removeOnFail: true,
-          backoff: {
-            type: 'fixed',
-            delay: 10000,
-          },
-        },
-      }),
-      inject: [ConfigService],
-    }),
     BullModule.registerQueue({
       name: URL_CHECK_QUEUE,
+    }),
+    BullBoardModule.forFeature({
+      name: URL_CHECK_QUEUE,
+      adapter: BullAdapter,
     }),
   ],
   providers: [

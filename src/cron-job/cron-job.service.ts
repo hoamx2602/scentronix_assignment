@@ -1,15 +1,15 @@
 import { UserRepository } from '@app/common';
 import { URL_CHECK_QUEUE } from '@app/common/const';
 import { InjectQueue } from '@nestjs/bull';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { Queue } from 'bull';
-import { UrlsService } from 'src/urls/urls.service';
 
 @Injectable()
 export class CronJobService {
+  private readonly logger = new Logger(CronJobService.name);
+
   constructor(
-    private readonly urlsService: UrlsService,
     private readonly userRepository: UserRepository,
     @InjectQueue(URL_CHECK_QUEUE) private urlCheckQueue: Queue,
   ) {}
@@ -27,5 +27,6 @@ export class CronJobService {
     await this.urlCheckQueue.add({
       userId,
     });
+    this.logger.debug('scheduleUrlCheck', { userId, scheduleTime: Date.now() });
   }
 }
