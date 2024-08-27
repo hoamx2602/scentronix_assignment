@@ -1,4 +1,4 @@
-import { UserRepository } from '@app/common';
+import { User, UserRepository } from '@app/common';
 import { URL_CHECK_QUEUE } from '@app/common/const';
 import { InjectQueue } from '@nestjs/bull';
 import { Injectable, Logger } from '@nestjs/common';
@@ -14,13 +14,13 @@ export class CronJobService {
     @InjectQueue(URL_CHECK_QUEUE) private urlCheckQueue: Queue,
   ) {}
 
-  @Cron(CronExpression.EVERY_SECOND)
+  @Cron(CronExpression.EVERY_5_SECONDS)
   async handleCron() {
-    const users = await this.userRepository.find({});
-
-    for (const user of users) {
-      await this.scheduleUrlCheck(user._id.toHexString());
-    }
+    (await this.userRepository.filterWithCursor({})).eachAsync(
+      async (doc: User) => {
+        await this.scheduleUrlCheck(doc._id.toHexString());
+      },
+    );
   }
 
   async scheduleUrlCheck(userId: string) {

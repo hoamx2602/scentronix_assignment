@@ -15,6 +15,7 @@ import { BullModule } from '@nestjs/bull';
 import { URL_CHECK_QUEUE } from '@app/common/const';
 import { BullBoardModule } from '@bull-board/nestjs';
 import { BullAdapter } from '@bull-board/api/bullAdapter';
+import { UrlsProcessor } from './processors/url.processor';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { BullAdapter } from '@bull-board/api/bullAdapter';
     UrlsService,
     UrlRepository,
     UserRepository,
+    UrlsProcessor,
   ],
   exports: [CronJobService],
 })

@@ -4,9 +4,12 @@ import { Job } from 'bull';
 import { UrlDto } from '../../urls/dto';
 import { UrlsService } from '../../urls/urls.service';
 import { URL_CHECK_QUEUE } from '@app/common/const';
+import { Logger } from '@nestjs/common';
 
 @Processor(URL_CHECK_QUEUE)
 export class UrlsProcessor {
+  private readonly logger = new Logger(UrlsProcessor.name);
+
   constructor(
     private readonly urlRepository: UrlRepository,
     private readonly urlService: UrlsService,

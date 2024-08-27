@@ -30,7 +30,8 @@ export class UrlsController {
 
   @Post('/check-status')
   @ApiOperation({
-    description: 'Get reachable urls list and sort',
+    description:
+      'Get reachable urls list and sort (only for ADMIN or MORDERATOR',
   })
   @ApiBody({
     type: GetReachableUrlsDto,
