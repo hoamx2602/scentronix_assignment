@@ -7,6 +7,8 @@ import {
   AlertMethodRepository,
   AlertMethodSchema,
 } from '@app/common';
+import { EmailService } from './methods/email.service';
+import { SlackWebhookService } from './methods/slack.service';
 
 @Module({
   imports: [
@@ -15,6 +17,11 @@ import {
     ]),
   ],
   controllers: [AlertController],
-  providers: [AlertService, AlertMethodRepository],
+  providers: [
+    AlertService,
+    AlertMethodRepository,
+    EmailService,
+    SlackWebhookService,
+  ],
 })
 export class AlertModule {}

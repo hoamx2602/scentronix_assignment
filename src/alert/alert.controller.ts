@@ -13,12 +13,12 @@ import { JwtAuthGuard } from '../auth/guards';
 import { AlertService } from './alert.service';
 import { CreateAlertMethodDto, UpdateAlertMethodDto } from './dto';
 
-@Controller('alerts')
+@Controller('alert-methods')
 @ApiTags('Alert')
 export class AlertController {
   constructor(private readonly alertService: AlertService) {}
 
-  @Post('/method')
+  @Post('/')
   @ApiOperation({
     description: 'Create new alert method for user',
   })
@@ -39,7 +39,7 @@ export class AlertController {
     description: 'Update alert method for user',
   })
   @ApiBody({
-    type: CreateAlertMethodDto,
+    type: UpdateAlertMethodDto,
   })
   @HttpCode(200)
   @UseGuards(JwtAuthGuard)
