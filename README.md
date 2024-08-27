@@ -3,6 +3,12 @@
 ### Basic System Design:
 ![Alt Text](docs/monitoring_system-Page-2.drawio.svg)
 
+### How to check online url?
+I offer 2 solutions as follows: (approach 2 for simple)
+- Using call http HEAD method to get only header of specific url (not include response body). But with this approach, we cannot make sure all the request will support this method.
+- Using Get method to get status of specific url. If this statusCode in (200, 299), we will consider it online.
+> If A status code is 3xx, maybe it redirect to another url, but that url return 200. I'm not sure about this case. We need to think carefully.
+
 ### Install & Run:
 1. Required
     - Node: > v21.5.0
@@ -56,6 +62,11 @@ npm run test
 ```
 npm run test -- <file name>
 ```
+3. Test coverage
+```
+npm run test -- --coverage
+```
+![Alt Text](docs/test_coverage.png)
 
 ### Docs:
 After starting the app, access: 
