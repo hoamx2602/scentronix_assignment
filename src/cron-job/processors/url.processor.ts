@@ -48,7 +48,7 @@ export class UrlsProcessor {
     }
   }
 
-  async handleSendAlertToUser(message: string, userId: string) {
+  async handleSendAlertToUser(userId: string, message: string) {
     await this.alertService.sendAlert(userId, message);
     await this.alertService.saveAlertHistory({
       user_id: userId,

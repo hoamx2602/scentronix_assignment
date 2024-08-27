@@ -14,7 +14,7 @@ export class CronJobService {
     @InjectQueue(URL_CHECK_QUEUE) private urlCheckQueue: Queue,
   ) {}
 
-  @Cron(CronExpression.EVERY_5_SECONDS)
+  @Cron(CronExpression.EVERY_MINUTE)
   async handleCron() {
     (await this.userRepository.filterWithCursor({})).eachAsync(
       async (doc: User) => {

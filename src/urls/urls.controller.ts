@@ -9,17 +9,11 @@ import {
 } from '@nestjs/common';
 import { UrlsService } from './urls.service';
 import { AddUrlsDto, GetReachableUrlsDto, QueryDto, UrlDto } from './dto';
-import {
-  ApiBearerAuth,
-  ApiBody,
-  ApiOperation,
-  ApiQuery,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Roles } from '../auth/decorators/role.decorator';
 import { UserRole } from '@app/common/enums';
 import { RolesGuard, JwtAuthGuard } from '../auth/guards';
-import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { User } from '@app/common';
 
 @ApiTags('Url')
@@ -61,9 +55,6 @@ export class UrlsController {
   @Get('/reachable')
   @ApiOperation({
     description: 'Get online services for current user',
-  })
-  @ApiQuery({
-    type: QueryDto,
   })
   @HttpCode(200)
   @UseGuards(JwtAuthGuard)
