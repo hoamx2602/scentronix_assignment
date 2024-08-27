@@ -1,9 +1,9 @@
 # MONITORING SYSTEM APPLICATION
 
-### Basic System Design
+### Basic System Design:
 ![Alt Text](docs/monitoring_system-Page-2.drawio.svg)
 
-### Install & Run
+### Install & Run:
 1. Required
     - Node: > v21.5.0
     - Docker: Docker version 27.0.3, build 7d4bcd8
@@ -21,6 +21,19 @@ docker compose up -d
 npm run start:dev
 ```
 
+### Main Flow:
+- **Admin:** 
+  - Only the Admin can access API: POST `/api/url/check-status` to check online URLs from a specific given list URLs.
+- **Normal User:**
+  - Can store their own urls list: POST `/api/urls`
+  - Check their own online urls
+    >Maybe we need throttle for this api
+  - Can add a new alert channel (email, slack,...) to receive the alert when their urls shut down or something does not work. 
+    >At the moment, only one user per channel alert is supported.
+  - Can update their alert method by adding another methods like: gmail, slack,...
+- **Automation (Schedule):**
+  - There is an automatic thread that checks the status of all users' urls every minute. If a user has at least one url that is not working, it will send a notification through the alert channel that the user has registered so that the user can know.
+
 ### Before Test:
 Before test flow, we need to create an admin account by run shell script (optional for db run by docker, we still create a new admin by manual in database)
 1. Run: `chmod +x ./scripts/init-admin.sh`
@@ -31,25 +44,20 @@ username: admin1670
 password: strongP@ssword
 ```
 
-### Main Flow:
-- **Admin:** 
-  - Only the Admin can access API: POST `/api/url/check-status` to check online URLs from a specific given list URLs.
-- **Normal User:**
-  - Can store their own urls list: POST `/api/urls`
-  - Check their own online urls
-    >Maybe we need throttle for this api
-  - Can add a new alert channel (email, slack,...) to receive the alert when their urls shut down or something does not work. 
-    > At the moment, only one user per channel alert is supported.
-  - Can update their alert method by adding another methods like: gmail, slack,...
-- **Automation (Schedule):**
-  - There is an automatic thread that checks the status of all users' urls every minute. If a user has at least one url that is not working, it will send a notification through the alert channel that the user has registered so that the user can know.
 
-### Test
+### Test:
+Note:
+>If using VSCODE, maybe you need to change `"**/*.spec.ts": false,` in `.vscode/settings.json`to see all the spec files
+1. Run all:
 ```
 npm run test
 ```
+2. Run specific test:
+```
+npm run test -- <file name>
+```
 
-### Docs
+### Docs:
 After starting the app, access: 
 
 - APIs docs: http://localhost:3005/api/docs
@@ -58,7 +66,7 @@ After starting the app, access:
 - Queue Dashboard: http://localhost:3005/api/queues
 ![Alt Text](docs/queue_dashboard.png)
 
-### ENV
+### ENV:
 Follow env key as the `.env.example` file.
 ```bash
 NODE_ENV=development
