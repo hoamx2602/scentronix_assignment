@@ -20,6 +20,9 @@ export class CronJobService {
       async (doc: User) => {
         await this.scheduleUrlCheck(doc._id.toHexString());
       },
+      {
+        parallel: 5,
+      },
     );
   }
 
