@@ -7,7 +7,7 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { JwtAuthGuard } from '../auth/guards';
 import { AlertService } from './alert.service';
@@ -15,6 +15,7 @@ import { CreateAlertMethodDto, UpdateAlertMethodDto } from './dto';
 
 @Controller('alert-methods')
 @ApiTags('Alert')
+@ApiBearerAuth()
 export class AlertController {
   constructor(private readonly alertService: AlertService) {}
 

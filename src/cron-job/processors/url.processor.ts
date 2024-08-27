@@ -25,12 +25,13 @@ export class UrlsProcessor {
 
     try {
       const userUrls = await this.findAllUserUrls(userId);
-
       const onlineUrls = await this.urlService.getOnlineServices(userUrls);
       const offlineUrls = this.getOfflineUrls(userUrls, onlineUrls);
-
       if (offlineUrls.length) {
-        await this.alertService.sendAlert(userId, JSON.stringify(offlineUrls));
+        await this.handleSendAlertToUser(
+          userId,
+          JSON.stringify(offlineUrls, null, 2),
+        );
       }
     } catch (error) {
       const admins = await this.userRepository.find({
@@ -43,7 +44,16 @@ export class UrlsProcessor {
         this.alertService.sendAlert(admin._id.toHexString(), 'CANNOT PROCESS'),
       );
       await Promise.all(promises);
+      this.logger.error('handleUrlCheckFailed', error);
     }
+  }
+
+  async handleSendAlertToUser(message: string, userId: string) {
+    await this.alertService.sendAlert(userId, message);
+    await this.alertService.saveAlertHistory({
+      user_id: userId,
+      alert_message: message,
+    });
   }
 
   async findAllUserUrls(serviceOwnerId: string) {

@@ -1,11 +1,21 @@
-import { AlertMethod, AlertMethodRepository, User } from '@app/common';
+import {
+  AlertHistoryRepository,
+  AlertMethod,
+  AlertMethodRepository,
+  User,
+} from '@app/common';
 import {
   ConflictException,
   Injectable,
   Logger,
   NotFoundException,
+  NotImplementedException,
 } from '@nestjs/common';
-import { CreateAlertMethodDto, UpdateAlertMethodDto } from './dto';
+import {
+  CreateAlertMethodDto,
+  SaveAlertHistoryDto,
+  UpdateAlertMethodDto,
+} from './dto';
 import {
   ALERT_METHOD_ALREADY_EXIST_FOR_USER,
   NOT_FOUND_ALERT_METHOD,
@@ -19,6 +29,7 @@ export class AlertService {
   private readonly logger = new Logger(AlertService.name);
   constructor(
     private readonly alertMethodRepository: AlertMethodRepository,
+    private readonly alertHistoryRepository: AlertHistoryRepository,
     private readonly emailService: EmailService,
     private readonly slackService: SlackWebhookService,
   ) {}
@@ -88,7 +99,16 @@ export class AlertService {
         break;
 
       default:
-        break;
+        throw new NotImplementedException('Unsupported alert method type');
     }
+  }
+
+  async saveAlertHistory(alertHistoryDto: SaveAlertHistoryDto) {
+    await this.alertHistoryRepository.create({
+      user_id: alertHistoryDto.user_id,
+      alert_method_id: alertHistoryDto.alert_method_id,
+      alert_message: alertHistoryDto.alert_message,
+      status: alertHistoryDto.status,
+    });
   }
 }

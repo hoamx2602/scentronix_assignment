@@ -20,12 +20,12 @@ export class AlertHistory extends AbstractDocument {
   @Prop({ required: true, type: String })
   user_id: string;
 
-  @Prop({ required: true, type: String })
+  @Prop({ type: String })
   @ApiProperty({
     description: 'Alert method id',
     example: '66cd1a05b84953b1b570c00f',
   })
-  alert_method_id: string;
+  alert_method_id?: string;
 
   @Prop({
     type: String,
