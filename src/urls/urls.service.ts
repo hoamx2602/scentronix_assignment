@@ -62,7 +62,7 @@ export class UrlsService {
     return filteredUrl.sort((a, b) => a.priority - b.priority);
   }
 
-  async addUserUrls(user: User, addUrlsDto: AddUrlsDto) {
+  async addUserUrls(user: User, addUrlsDto: AddUrlsDto): Promise<Url[]> {
     const { urls } = addUrlsDto;
 
     const urlStrings = urls.map((urlDto) => urlDto.url);

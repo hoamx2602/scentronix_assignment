@@ -1,4 +1,5 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { Url } from '@app/common';
+import { ApiProperty, PickType } from '@nestjs/swagger';
 import {
   IsInt,
   IsNotEmpty,
@@ -8,7 +9,7 @@ import {
   Min,
 } from 'class-validator';
 
-export class UrlDto {
+export class UrlDto extends PickType(Url, ['url', 'priority']) {
   @IsString()
   @IsUrl()
   @IsNotEmpty()
