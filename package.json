@@ -97,9 +97,7 @@
     ],
     "moduleNameMapper": {
       "^@app/schemas(|/.*)$": "<rootDir>/libs/schemas/src/$1",
-      "^@app/common(|/.*)$": "<rootDir>/libs/common/src/$1",
-      "^@app/bull(|/.*)$": "<rootDir>/libs/bull/src/$1",
-      "^@app/common/bull(|/.*)$": "<rootDir>/libs/common/bull/src/$1"
+      "^@app/common(|/.*)$": "<rootDir>/libs/common/src/$1"
     }
   }
 }
