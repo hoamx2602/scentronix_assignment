@@ -23,5 +23,6 @@ import { SlackWebhookService } from './methods/slack.service';
     EmailService,
     SlackWebhookService,
   ],
+  exports: [AlertService],
 })
 export class AlertModule {}

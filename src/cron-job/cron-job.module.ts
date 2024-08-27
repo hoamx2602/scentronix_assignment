@@ -16,6 +16,7 @@ import { URL_CHECK_QUEUE } from '@app/common/const';
 import { BullBoardModule } from '@bull-board/nestjs';
 import { BullAdapter } from '@bull-board/api/bullAdapter';
 import { UrlsProcessor } from './processors/url.processor';
+import { AlertModule } from 'src/alert/alert.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { UrlsProcessor } from './processors/url.processor';
       name: URL_CHECK_QUEUE,
       adapter: BullAdapter,
     }),
+    AlertModule,
   ],
   providers: [
     CronJobService,

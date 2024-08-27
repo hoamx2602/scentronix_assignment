@@ -1,10 +1,12 @@
-import { UrlRepository } from '@app/common';
+import { UrlRepository, UserRepository } from '@app/common';
 import { Process, Processor } from '@nestjs/bull';
 import { Job } from 'bull';
 import { UrlDto } from '../../urls/dto';
 import { UrlsService } from '../../urls/urls.service';
 import { URL_CHECK_QUEUE } from '@app/common/const';
 import { Logger } from '@nestjs/common';
+import { AlertService } from 'src/alert/alert.service';
+import { UserRole } from '@app/common/enums';
 
 @Processor(URL_CHECK_QUEUE)
 export class UrlsProcessor {
@@ -12,7 +14,9 @@ export class UrlsProcessor {
 
   constructor(
     private readonly urlRepository: UrlRepository,
+    private readonly userRepository: UserRepository,
     private readonly urlService: UrlsService,
+    private readonly alertService: AlertService,
   ) {}
 
   @Process()
@@ -26,10 +30,19 @@ export class UrlsProcessor {
       const offlineUrls = this.getOfflineUrls(userUrls, onlineUrls);
 
       if (offlineUrls.length) {
-        // TODO: Send alert to User
+        await this.alertService.sendAlert(userId, JSON.stringify(offlineUrls));
       }
     } catch (error) {
-      // TODO: Send alert to Admin
+      const admins = await this.userRepository.find({
+        role: {
+          $in: [UserRole.ADMIN, UserRole.MODERATOR],
+        },
+      });
+
+      const promises = admins.map((admin) =>
+        this.alertService.sendAlert(admin._id.toHexString(), 'CANNOT PROCESS'),
+      );
+      await Promise.all(promises);
     }
   }
 
