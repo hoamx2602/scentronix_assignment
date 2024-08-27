@@ -74,6 +74,7 @@ After starting the app, access:
 - APIs docs: http://localhost:3005/api/docs
 ![Alt Text](docs/swagger.png)
 <br>
+
 - Queue Dashboard: http://localhost:3005/api/queues
 ![Alt Text](docs/queue_dashboard.png)
 
