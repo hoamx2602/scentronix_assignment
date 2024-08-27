@@ -62,6 +62,6 @@ export class UrlsController {
     @CurrentUser() user: User,
     @Query() query: QueryDto,
   ) {
-    await this.urlsService.getOnlineServicesForUser(user, query);
+    return await this.urlsService.getOnlineServicesForUser(user, query);
   }
 }
