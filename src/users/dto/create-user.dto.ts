@@ -3,14 +3,14 @@ import {
   IsNotEmpty,
   IsString,
   IsStrongPassword,
-  Max,
-  Min,
+  MaxLength,
+  MinLength,
 } from 'class-validator';
 
 export class CreateUserDto {
   @IsString()
-  @Min(5)
-  @Max(20)
+  @MinLength(5)
+  @MaxLength(20)
   @ApiProperty({ example: 'your_username' })
   username: string;
 

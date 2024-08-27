@@ -4,21 +4,21 @@ import {
   IsNotEmpty,
   IsString,
   IsStrongPassword,
-  Max,
-  Min,
+  MaxLength,
+  MinLength,
 } from 'class-validator';
 
 export class RegisterDto extends PickType(User, ['username', 'password']) {
   @IsString()
   @IsNotEmpty()
-  @Min(5)
-  @Max(20)
+  @MinLength(5)
+  @MaxLength(20)
   username: string;
 
   @IsString()
   @IsNotEmpty()
   @IsStrongPassword()
-  @Min(8)
-  @Max(20)
+  @MinLength(8)
+  @MaxLength(20)
   password: string;
 }
