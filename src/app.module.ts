@@ -8,6 +8,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { BullModule } from '@nestjs/bull';
 import { BullBoardModule } from '@bull-board/nestjs';
 import { ExpressAdapter } from '@bull-board/express';
+import { AlertModule } from './alert/alert.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { ExpressAdapter } from '@bull-board/express';
     UsersModule,
     UrlsModule,
     CronJobModule,
+    AlertModule,
   ],
   controllers: [],
   providers: [],

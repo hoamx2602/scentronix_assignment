@@ -3,6 +3,7 @@ import { Document } from 'mongoose';
 import { AbstractDocument } from '../database/abstract.schema';
 import { getUnixTime } from 'date-fns';
 import { AlertHistoryStatus } from '../enums';
+import { ApiProperty } from '@nestjs/swagger';
 
 export type AlertHistoryDocument = AlertHistory & Document;
 
@@ -20,6 +21,10 @@ export class AlertHistory extends AbstractDocument {
   user_id: string;
 
   @Prop({ required: true, type: String })
+  @ApiProperty({
+    description: 'Alert method id',
+    example: '66cd1a05b84953b1b570c00f',
+  })
   alert_method_id: string;
 
   @Prop({
@@ -27,10 +32,18 @@ export class AlertHistory extends AbstractDocument {
     enum: AlertHistoryStatus,
     default: AlertHistoryStatus.SUCCESS,
   })
+  @ApiProperty({
+    description: 'Status of this alert hsitory',
+    example: AlertHistoryStatus.SUCCESS,
+  })
   status: AlertHistoryStatus;
 
   @Prop({ type: String })
-  response_message: string;
+  @ApiProperty({
+    description: 'Alert message',
+    example: 'Warning you',
+  })
+  alert_message: string;
 }
 
 export const AlertHistorySchema = SchemaFactory.createForClass(AlertHistory);
