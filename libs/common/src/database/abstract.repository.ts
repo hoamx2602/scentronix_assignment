@@ -77,6 +77,13 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
     return this.model.find(filterQuery, projection, { lean: true });
   }
 
+  async filterWithCursor(
+    filterQuery: FilterQuery<TDocument>,
+    projection: ProjectionType<TDocument> = {},
+  ) {
+    return this.model.find(filterQuery, projection).cursor();
+  }
+
   async startTransaction() {
     const session = await this.connection.startSession();
     session.startTransaction();
